@@ -1,29 +1,43 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 import './Education.css'
 
+const getLocalItem = () => {
+    let education = localStorage.getItem('education')
+
+    if (education) {
+        return JSON.parse(localStorage.getItem('education'))
+    }
+    else {
+        return []
+    }
+}
+
 const Education = () => {
 
-    const [input, setInput] = useState('')
-    const [list, setList] = useState([])
+    const [educationInput, setEducationInput] = useState('')
+    const [educationList, setEducationList] = useState(getLocalItem())
 
-    const addList = () => {
-        setList([...list, input])
+    useEffect(() => {
+        localStorage.setItem('education', JSON.stringify(educationList));
+    }, [educationList])
+
+    const addEducationList = () => {
+        setEducationList([...educationList, educationInput])
     }
     const clickHandler = () => {
-        if (!input) {
+        if (!educationInput) {
             alert("please add your list.")
         } else {
-            addList(input)
-            setInput("")
-            console.log(list)
+            addEducationList(educationInput)
+            setEducationInput("")
         }
     }
 
     const deleteHandler = (id) => {
-        const newList = [...list]
-        newList.splice(id, 1)
-        setList([...newList])
+        const newEducationList = [...educationList]
+        newEducationList.splice(id, 1)
+        setEducationList([...newEducationList])
     }
 
     return (
@@ -35,7 +49,7 @@ const Education = () => {
                 <div className='educationpage-input-and-list'>
                     <div className='input-and-addbutton'>
                         <div className='input-tag'>
-                            <input type='text' name='input' value={input} placeholder='Enter your Task ..' onChange={(e) => { setInput(e.target.value) }} />
+                            <input type='text' name='input' value={educationInput} placeholder='Enter your Task ..' onChange={(e) => { setEducationInput(e.target.value) }} />
                         </div>
                         <div className='add-button'>
                             <button onClick={clickHandler}>Add</button>
@@ -43,7 +57,7 @@ const Education = () => {
                     </div>
                     <div className='todo-list'>
                         {
-                            list.map((item, id) => {
+                            educationList.map((item, id) => {
                                 return (
                                     <p key={id}>{item}
                                         <span className='delete-icon'>

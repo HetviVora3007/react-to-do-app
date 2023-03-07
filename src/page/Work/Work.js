@@ -1,29 +1,43 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 import './Work.css'
 
+const getLocalItem = () => {
+    let work = localStorage.getItem('work')
+
+    if (work) {
+        return JSON.parse(localStorage.getItem('work'))
+    }
+    else {
+        return []
+    }
+}
+
 const Work = () => {
 
-    const [input, setInput] = useState('')
-    const [list, setList] = useState([])
+    const [workInput, setWorkInput] = useState('')
+    const [workList, setWorkList] = useState(getLocalItem())
 
-    const addList = () => {
-        setList([...list, input])
+    useEffect(() => {
+        localStorage.setItem('work', JSON.stringify(workList));
+    }, [workList])
+
+    const addWorkList = () => {
+        setWorkList([...workList, workInput])
     }
     const clickHandler = () => {
-        if (!input) {
+        if (!workInput) {
             alert("please add your list.")
         } else {
-            addList(input)
-            setInput("")
-            console.log(list)
+            addWorkList(workInput)
+            setWorkInput("")
         }
     }
 
     const deleteHandler = (id) => {
-        const newList = [...list]
-        newList.splice(id, 1)
-        setList([...newList])
+        const newWorkList = [...workList]
+        newWorkList.splice(id, 1)
+        setWorkList([...newWorkList])
     }
 
     return (
@@ -35,7 +49,7 @@ const Work = () => {
                 <div className='workpage-input-and-list'>
                     <div className='input-and-addbutton'>
                         <div className='input-tag'>
-                            <input type='text' name='input' value={input} placeholder='Enter your Task ..' onChange={(e) => { setInput(e.target.value) }} />
+                            <input type='text' name='input' value={workInput} placeholder='Enter your Task ..' onChange={(e) => { setWorkInput(e.target.value) }} />
                         </div>
                         <div className='add-button'>
                             <button onClick={clickHandler}>Add</button>
@@ -43,7 +57,7 @@ const Work = () => {
                     </div>
                     <div className='todo-list'>
                         {
-                            list.map((item, id) => {
+                            workList.map((item, id) => {
                                 return (
                                     <p key={id}>{item}
                                         <span className='delete-icon'>

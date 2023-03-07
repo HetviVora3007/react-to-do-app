@@ -1,29 +1,43 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 import './Travel.css'
 
+const getLocalItem = () => {
+    let travel = localStorage.getItem('travel')
+
+    if (travel) {
+        return JSON.parse(localStorage.getItem('travel'))
+    }
+    else {
+        return []
+    }
+}
+
 const Travel = () => {
 
-    const [input, setInput] = useState('')
-    const [list, setList] = useState([])
+    const [travelInput, setTravelInput] = useState('')
+    const [travelList, setTravelList] = useState(getLocalItem())
 
-    const addList = () => {
-        setList([...list, input])
+    useEffect(() => {
+        localStorage.setItem('travel', JSON.stringify(travelList));
+    }, [travelList])
+
+    const addTravelList = () => {
+        setTravelList([...travelList, travelInput])
     }
     const clickHandler = () => {
-        if (!input) {
+        if (!travelInput) {
             alert("please add your list.")
         } else {
-            addList(input)
-            setInput("")
-            console.log(list)
+            addTravelList(travelInput)
+            setTravelInput("")
         }
     }
 
     const deleteHandler = (id) => {
-        const newList = [...list]
-        newList.splice(id, 1)
-        setList([...newList])
+        const newTravelList = [...travelList]
+        newTravelList.splice(id, 1)
+        setTravelList([...newTravelList])
     }
 
     return (
@@ -35,7 +49,7 @@ const Travel = () => {
                 <div className='travelpage-input-and-list'>
                     <div className='input-and-addbutton'>
                         <div className='input-tag'>
-                            <input type='text' name='input' value={input} placeholder='Enter your Task ..' onChange={(e) => { setInput(e.target.value) }} />
+                            <input type='text' name='input' value={travelInput} placeholder='Enter your Task ..' onChange={(e) => { setTravelInput(e.target.value) }} />
                         </div>
                         <div className='add-button'>
                             <button onClick={clickHandler}>Add</button>
@@ -43,7 +57,7 @@ const Travel = () => {
                     </div>
                     <div className='todo-list'>
                         {
-                            list.map((item, id) => {
+                            travelList.map((item, id) => {
                                 return (
                                     <p key={id}>{item}
                                         <span className='delete-icon'>

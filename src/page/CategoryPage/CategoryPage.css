@@ -96,3 +96,28 @@
     font-weight: 500;
     margin-top: 20px;
 }
+
+@media screen and (max-width: 480px) {
+
+    .categorypage-container {
+        width: 99%;
+        height: 65%;
+    }
+
+    .travel-category p {
+        margin-top: 12px;
+    }
+
+    .personal-category-link,
+    .work-category-link,
+    .health-category-link,
+    .shopping-category-link,
+    .education-category-link {
+        width: 90%;
+    }
+
+    .travel-category-link {
+        width: 90%;
+        height: 78%;
+    }
+}

@@ -1,29 +1,43 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 import './Personal.css'
 
+const getLocalItem = () => {
+    let personal = localStorage.getItem('personal')
+
+    if (personal) {
+        return JSON.parse(localStorage.getItem('personal'))
+    }
+    else {
+        return []
+    }
+}
+
 const Personal = () => {
 
-    const [input, setInput] = useState('')
-    const [list, setList] = useState([])
+    const [personalInput, setPersonalInput] = useState('')
+    const [personalList, setPersonalList] = useState(getLocalItem())
 
-    const addList = () => {
-        setList([...list, input])
+    useEffect(() => {
+        localStorage.setItem('personal', JSON.stringify(personalList));
+    }, [personalList])
+
+    const addPersonalList = () => {
+        setPersonalList([...personalList, personalInput])
     }
     const clickHandler = () => {
-        if (!input) {
+        if (!personalInput) {
             alert("please add your list.")
         } else {
-            addList(input)
-            setInput("")
-            console.log(list)
+            addPersonalList(personalInput)
+            setPersonalInput("")
         }
     }
 
     const deleteHandler = (id) => {
-        const newList = [...list]
-        newList.splice(id, 1)
-        setList([...newList])
+        const newPersonalList = [...personalList]
+        newPersonalList.splice(id, 1)
+        setPersonalList([...newPersonalList])
     }
 
     return (
@@ -35,7 +49,7 @@ const Personal = () => {
                 <div className='personalpage-input-and-list'>
                     <div className='input-and-addbutton'>
                         <div className='input-tag'>
-                            <input type='text' name='input' value={input} placeholder='Enter your Task ..' onChange={(e) => { setInput(e.target.value) }} />
+                            <input type='text' name='input' value={personalInput} placeholder='Enter your Task ..' onChange={(e) => { setPersonalInput(e.target.value) }} />
                         </div>
                         <div className='add-button'>
                             <button onClick={clickHandler}>Add</button>
@@ -43,12 +57,12 @@ const Personal = () => {
                     </div>
                     <div className='todo-list'>
                         {
-                            list.map((item, id) => {
+                            personalList.map((item, id) => {
                                 return (
                                     <p key={id}>{item}
                                         <span className='delete-icon'>
                                             <span className='line-icon'>
-                                                <i class="fa-sharp fa-solid fa-pen-to-square"></i>
+                                                <i class="fa-sharp fa-solid fa-pen-to-square" ></i>
                                             </span>
                                             <i className="fa-solid fa-trash" onClick={() => { deleteHandler(id) }}></i>
                                         </span>

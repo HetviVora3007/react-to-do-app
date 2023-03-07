@@ -1,29 +1,43 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 import './Shopping.css'
 
+const getLocalItem = () => {
+    let shopping = localStorage.getItem('shopping')
+
+    if (shopping) {
+        return JSON.parse(localStorage.getItem('shopping'))
+    }
+    else {
+        return []
+    }
+}
+
 const Shopping = () => {
 
-    const [input, setInput] = useState('')
-    const [list, setList] = useState([])
+    const [shoppingInput, setShoppingInput] = useState('')
+    const [shoppingList, setShoppingList] = useState(getLocalItem())
 
-    const addList = () => {
-        setList([...list, input])
+    useEffect(() => {
+        localStorage.setItem('shopping', JSON.stringify(shoppingList));
+    }, [shoppingList])
+
+    const addShoppingList = () => {
+        setShoppingList([...shoppingList, shoppingInput])
     }
     const clickHandler = () => {
-        if (!input) {
+        if (!shoppingInput) {
             alert("please add your list.")
         } else {
-            addList(input)
-            setInput("")
-            console.log(list)
+            addShoppingList(shoppingInput)
+            setShoppingInput("")
         }
     }
 
     const deleteHandler = (id) => {
-        const newList = [...list]
-        newList.splice(id, 1)
-        setList([...newList])
+        const newShoppingList = [...shoppingList]
+        newShoppingList.splice(id, 1)
+        setShoppingList([...newShoppingList])
     }
 
     return (
@@ -35,7 +49,7 @@ const Shopping = () => {
                 <div className='shoppingpage-input-and-list'>
                     <div className='input-and-addbutton'>
                         <div className='input-tag'>
-                            <input type='text' name='input' value={input} placeholder='Enter your Task ..' onChange={(e) => { setInput(e.target.value) }} />
+                            <input type='text' name='input' value={shoppingInput} placeholder='Enter your Task ..' onChange={(e) => { setShoppingInput(e.target.value) }} />
                         </div>
                         <div className='add-button'>
                             <button onClick={clickHandler}>Add</button>
@@ -43,7 +57,7 @@ const Shopping = () => {
                     </div>
                     <div className='todo-list'>
                         {
-                            list.map((item, id) => {
+                            shoppingList.map((item, id) => {
                                 return (
                                     <p key={id}>{item}
                                         <span className='delete-icon'>

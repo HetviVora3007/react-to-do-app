@@ -1,29 +1,44 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 import './Health.css'
 
+const getLocalItem = () => {
+    let health = localStorage.getItem('health')
+
+    if (health) {
+        return JSON.parse(localStorage.getItem('health'))
+    }
+    else {
+        return []
+    }
+}
+
+
 const Health = () => {
 
-    const [input, setInput] = useState('')
-    const [list, setList] = useState([])
+    const [healthInput, setHealthInput] = useState('')
+    const [healthList, setHealthList] = useState(getLocalItem())
 
-    const addList = () => {
-        setList([...list, input])
+    useEffect(() => {
+        localStorage.setItem('health', JSON.stringify(healthList));
+    }, [healthList])
+
+    const addHealthList = () => {
+        setHealthList([...healthList, healthInput])
     }
     const clickHandler = () => {
-        if (!input) {
+        if (!healthInput) {
             alert("please add your list.")
         } else {
-            addList(input)
-            setInput("")
-            console.log(list)
+            addHealthList(healthInput)
+            setHealthInput("")
         }
     }
 
     const deleteHandler = (id) => {
-        const newList = [...list]
-        newList.splice(id, 1)
-        setList([...newList])
+        const newHealthList = [...healthList]
+        newHealthList.splice(id, 1)
+        setHealthList([...newHealthList])
     }
 
     return (
@@ -35,7 +50,7 @@ const Health = () => {
                 <div className='healthpage-input-and-list'>
                     <div className='input-and-addbutton'>
                         <div className='input-tag'>
-                            <input type='text' name='input' value={input} placeholder='Enter your Task ..' onChange={(e) => { setInput(e.target.value) }} />
+                            <input type='text' name='input' value={healthInput} placeholder='Enter your Task ..' onChange={(e) => { setHealthInput(e.target.value) }} />
                         </div>
                         <div className='add-button'>
                             <button onClick={clickHandler}>Add</button>
@@ -43,7 +58,7 @@ const Health = () => {
                     </div>
                     <div className='todo-list'>
                         {
-                            list.map((item, id) => {
+                            healthList.map((item, id) => {
                                 return (
                                     <p key={id}>{item}
                                         <span className='delete-icon'>

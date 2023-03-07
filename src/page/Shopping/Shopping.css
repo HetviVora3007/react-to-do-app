@@ -114,3 +114,33 @@
     align-items: center;
     padding-right: 15px;
 }
+
+@media screen and (max-width: 480px) {
+    .shoppingpage-input-and-list {
+        width: 95%;
+    }
+
+    .input-tag {
+        width: 60%;
+    }
+
+    .add-button {
+        width: 25%;
+    }
+
+    .todo-list {
+        width: 90%;
+    }
+
+    .todo-list p {
+        width: 96%;
+    }
+
+    .add-button {
+        height: 53%;
+    }
+
+    .shoppingpage-title p {
+        font-size: 46px;
+    }
+}
